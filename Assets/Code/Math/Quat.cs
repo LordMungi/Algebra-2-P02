@@ -13,6 +13,12 @@ namespace CustomMath
         public float w;
         #endregion
 
+        #region Properties
+        public static Quat identity { get { throw new NotImplementedException(); } }
+        public Vec3 eulerAngles { get { throw new NotImplementedException(); } }
+        public Quat normalized { get { throw new NotImplementedException(); } }
+        #endregion
+
         #region Constructors
         Quat(float x, float y, float z, float w)
         {
