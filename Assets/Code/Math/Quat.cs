@@ -37,12 +37,12 @@ namespace CustomMath
         #endregion
 
         #region Operators
-        public static Quat operator ==(Quat lhs, Quat rhs)
+        public static bool operator ==(Quat lhs, Quat rhs)
         {
             throw new NotImplementedException();
         }
 
-        public static Quat operator !=(Quat lhs, Quat rhs)
+        public static bool operator !=(Quat lhs, Quat rhs)
         {
             throw new NotImplementedException();
         }
