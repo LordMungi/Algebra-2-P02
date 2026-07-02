@@ -3,7 +3,7 @@ using UnityEngine;
 
 namespace CustomMath
 {
-    public class Mat4x4
+    public class Mat4x4 : IEquatable<Mat4x4>, IFormattable
     {
         #region Variables
         public float m00;
@@ -163,6 +163,16 @@ namespace CustomMath
         }
 
         public string ToString()
+        {
+            throw new NotImplementedException();
+        }
+
+        public string ToString(string format, IFormatProvider formatProvider)
+        {
+            throw new NotImplementedException();
+        }
+
+        public bool Equals(Mat4x4 other)
         {
             throw new NotImplementedException();
         }

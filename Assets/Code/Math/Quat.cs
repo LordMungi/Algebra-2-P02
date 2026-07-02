@@ -4,7 +4,7 @@ using UnityEngine;
 
 namespace CustomMath
 {
-    public struct Quat
+    public struct Quat : IEquatable<Quat>, IFormattable
     {
         #region Variables
         public float x;
@@ -197,6 +197,16 @@ namespace CustomMath
         }
 
         public Vec3 ToEuler()
+        {
+            throw new NotImplementedException();
+        }
+
+        public bool Equals(Quat other)
+        {
+            throw new NotImplementedException();
+        }
+
+        public string ToString(string format, IFormatProvider formatProvider)
         {
             throw new NotImplementedException();
         }
