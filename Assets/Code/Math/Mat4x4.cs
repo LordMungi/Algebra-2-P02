@@ -3,7 +3,7 @@ using UnityEngine;
 
 namespace CustomMath
 {
-    public class Mat4x4 : IEquatable<Mat4x4>, IFormattable
+    public struct Mat4x4 : IEquatable<Mat4x4>, IFormattable
     {
         #region Variables
         public float m00;
@@ -425,47 +425,149 @@ namespace CustomMath
         #region Instance
         public Vec3 GetPosition()
         {
-            throw new NotImplementedException();
+            return new Vec3(m03, m13, m23);
         }
 
         public Vector4 GetRow(int index)
         {
-            throw new NotImplementedException();
+            switch (index)
+            {
+                case 0:
+                    return new Vector4(m00, m01, m02, m03);
+                case 1:
+                    return new Vector4(m10, m11, m12, m13);
+                case 2:
+                    return new Vector4(m20, m21, m22, m23);
+                case 3:
+                    return new Vector4(m30, m31, m32, m33);
+                default:
+                    return Vector4.zero;
+            }
         }
 
         public Vec3 MultiplyPoint(Vec3 point)
         {
-            throw new NotImplementedException();
+            Vector4 result = this * new Vector4(point.x, point.y, point.z, 1);
+
+            if (result.w != 0)
+            {
+                float ww = 1 / result.w;
+                return new Vec3(result.x * ww, result.y * ww, result.z * ww);
+            }
+
+            return new Vec3(result.x, result.y, result.z);
         }
 
         public Vec3 MultiplyPoint3x4(Vec3 point)
         {
-            throw new NotImplementedException();
+            return new Vec3(
+                m00 * point.x + m01 * point.y + m02 * point.z + m03,
+                m10 * point.x + m11 * point.y + m12 * point.z + m13,
+                m20 * point.x + m21 * point.y + m22 * point.z + m23
+            );
         }
 
         public Vec3 MultiplyVector(Vec3 vector)
         {
-            throw new NotImplementedException();
+            Vector4 result = this * new Vector4(vector.x, vector.y, vector.z, 0);
+            return new Vec3(result.x, result.y, result.z);
         }
 
         public void SetColumn(int index, Vector4 column)
         {
-            throw new NotImplementedException();
+            switch (index)
+            {
+                case 0:
+                    m00 = column.x;
+                    m10 = column.y;
+                    m20 = column.z;
+                    m30 = column.w;
+                    break;
+                case 1:
+                    m01 = column.x;
+                    m11 = column.y;
+                    m21 = column.z;
+                    m31 = column.w;
+                    break;
+                case 2:
+                    m02 = column.x;
+                    m12 = column.y;
+                    m22 = column.z;
+                    m32 = column.w;
+                    break;
+                case 3:
+                    m03 = column.x;
+                    m13 = column.y;
+                    m23 = column.z;
+                    m33 = column.w;
+                    break;
+                default:
+                    break;
+            }
         }
 
         public void SetRow(int index, Vector4 row)
         {
-            throw new NotImplementedException();
+            switch (index)
+            {
+                case 0:
+                    m00 = row.x;
+                    m01 = row.y;
+                    m02 = row.z;
+                    m03 = row.w;
+                    break;
+                case 1:
+                    m10 = row.x;
+                    m11 = row.y;
+                    m12 = row.z;
+                    m13 = row.w;
+                    break;
+                case 2:
+                    m20 = row.x;
+                    m21 = row.y;
+                    m22 = row.z;
+                    m23 = row.w;
+                    break;
+                case 3:
+                    m30 = row.x;
+                    m31 = row.y;
+                    m32 = row.z;
+                    m33 = row.w;
+                    break;
+                default:
+                    break;
+            }
         }
 
         public void SetTRS(Vec3 pos, Quat q, Vec3 s)
         {
-            throw new NotImplementedException();
+            this = TRS(pos, q, s);
         }
 
         public bool ValidTRS()
         {
-            throw new NotImplementedException();
+            if (m30 != 0 || m31 != 0 || m32 != 0 || m33 != 1)
+                return false;
+
+            Vec3 x = new Vec3(m00, m10, m20);
+            Vec3 y = new Vec3(m01, m11, m21);
+            Vec3 z = new Vec3(m02, m12, m22);
+
+            float mx = x.magnitude;
+            float my = y.magnitude;
+            float mz = z.magnitude;
+
+            if (mx == 0 || my == 0 || mz == 0)
+                return false;
+
+            x /= mx;
+            y /= my;
+            z /= mz;
+
+            if (Mathf.Abs(Vec3.Dot(x, y)) != 0 || Mathf.Abs(Vec3.Dot(x, z)) != 0 || Mathf.Abs(Vec3.Dot(y, z)) != 0)
+                return false;
+
+            return true;
         }
 
         public string ToString(string format, IFormatProvider formatProvider)
