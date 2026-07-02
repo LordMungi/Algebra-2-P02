@@ -22,44 +22,58 @@ namespace CustomMath
         #region Constructors
         Quat(float x, float y, float z, float w)
         {
-            throw new NotImplementedException();
+            this.x = x;
+            this.y = y;
+            this.z = z;
+            this.w = w;
         }
 
         Quat(Quat clone)
         {
-            throw new NotImplementedException();
+            this = clone;
         }
 
         Quat(Quaternion clone)
         {
-            throw new NotImplementedException();
+            this.x = clone.x;
+            this.y = clone.y;
+            this.z = clone.z;
+            this.w = clone.w;
         }
         #endregion
 
         #region Operators
         public static bool operator ==(Quat lhs, Quat rhs)
         {
-            throw new NotImplementedException();
+            return lhs.x == rhs.x && lhs.y == rhs.y && lhs.z == rhs.z && lhs.w == rhs.w;
         }
 
         public static bool operator !=(Quat lhs, Quat rhs)
         {
-            throw new NotImplementedException();
+            return !(lhs == rhs);
         }
 
-        public static Quat operator *(Quat rotation, Vec3 point)
+        public static Vec3 operator *(Quat rotation, Vec3 point)
         {
-            throw new NotImplementedException();
+            Vec3 v = new Vec3(rotation.x, rotation.y, rotation.z);
+            return point + 2 * rotation.w * (Vec3.Cross(v, point)) + 2 * (Vec3.Cross(v, Vec3.Cross(v, point)));
         }
 
         public static Quat operator *(Quat lhs, Quat rhs)
         {
-            throw new NotImplementedException();
+            Quat q;
+
+            q.w = lhs.w * rhs.w - lhs.x * rhs.x - lhs.y * rhs.y - lhs.z * rhs.z;
+            q.x = lhs.w * rhs.x + lhs.x * rhs.w + lhs.y * rhs.z - lhs.z * rhs.y;
+            q.y = lhs.w * rhs.y - lhs.x * rhs.z + lhs.y * rhs.w + lhs.z * rhs.x;
+            q.z = lhs.w * rhs.z + lhs.x * rhs.y - lhs.y * rhs.x + lhs.z * rhs.w;
+
+            return q;
         }
 
         public static implicit operator Quat(Quaternion clone)
         {
-            throw new NotImplementedException();
+            return new Quat(clone);
         }
         #endregion
 
