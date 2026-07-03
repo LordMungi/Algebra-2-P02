@@ -7,42 +7,46 @@ public class CubeFragment : MonoBehaviour
     private Mat4x4 lastTRS;
     private Mat4x4 toTRS;
 
+    private float rotProgress;
+
     private void Awake()
     {
         TRS.SetTRS(transform.position, transform.rotation, Vec3.One);
         toTRS = TRS;
         lastTRS = TRS;
-        Debug.Log(TRS);
     }
 
     public void SetTargetRotation(Vec3 centerAxis, Vector3 eulerAngle)
     {
-        Vec3 pos = TRS.GetPosition();
+        lastTRS = toTRS;
+        rotProgress = 0;
+
+        Vec3 pos = toTRS.GetPosition();
         Quat rot = Quat.Euler(eulerAngle);
 
         Vec3 offset = pos - centerAxis;
         offset = rot * offset;
         pos = offset + centerAxis;
 
-        TRS.SetTRS(pos, rot * TRS.rotation, Vec3.One);
-        SetTRStoTransform();
-
+        toTRS.SetTRS(pos, rot * toTRS.rotation, Vec3.One);
         Debug.Log(toTRS);
     }
 
     public void MoveTowardsTarget(Vec3 centerAxis, float speed)
     {
-        Vec3 pos = lastTRS.GetPosition();
-        Quat lastRot = TRS.rotation;
-        //Quat rot = Quat.Slerp(lastTRS.rotation, toTRS.rotation, speed);
-        Quat rot = Quat.Euler(new Vec3(0, 90, 0)) * (Quat)TRS.rotation;
+        rotProgress += speed;
 
-        Vec3 offset = pos - centerAxis;
-        offset = rot * offset;
+        Quat rot = Quat.Slerp(lastTRS.rotation, toTRS.rotation, rotProgress);
+        Quat rotDelta = rot * Quat.Inverse(lastTRS.rotation);
+
+
+        Vec3 pos = lastTRS.GetPosition(); 
+        Vec3 offset =  pos - centerAxis;
+
+        offset = rotDelta * offset;
         pos = offset + centerAxis;
 
         TRS.SetTRS(pos, rot, Vec3.One);
-
         SetTRStoTransform();
     }
 

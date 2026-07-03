@@ -42,7 +42,7 @@ public class CubeRubik : MonoBehaviour
 
         foreach (CubeFragment f in fragments)
         {
-            //f.MoveTowardsTarget(transform.position, Speed * Time.deltaTime);
+            f.MoveTowardsTarget(transform.position, Speed * Time.deltaTime);
         }
     }
 }
