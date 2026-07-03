@@ -17,21 +17,16 @@ public class CubeFragment : MonoBehaviour
 
     public void SetTargetRotation(Vec3 centerAxis, Vector3 eulerAngle)
     {
-        Debug.Log(toTRS);
-
         Vec3 pos = TRS.GetPosition();
-        Quat rot = Quat.Euler(eulerAngle) * TRS.rotation;
+        Quat rot = Quat.Euler(eulerAngle);
 
         Vec3 offset = pos - centerAxis;
         offset = rot * offset;
         pos = offset + centerAxis;
 
-        toTRS.SetTRS(pos, rot, Vec3.One);
-        
-        transform.position = toTRS.GetPosition();
-        transform.rotation = toTRS.rotation;
-        transform.localScale = Vec3.Zero;
-        
+        TRS.SetTRS(pos, rot * TRS.rotation, Vec3.One);
+        SetTRStoTransform();
+
         Debug.Log(toTRS);
     }
 
@@ -39,7 +34,8 @@ public class CubeFragment : MonoBehaviour
     {
         Vec3 pos = lastTRS.GetPosition();
         Quat lastRot = TRS.rotation;
-        Quat rot = Quat.Slerp(lastTRS.rotation, toTRS.rotation, speed);
+        //Quat rot = Quat.Slerp(lastTRS.rotation, toTRS.rotation, speed);
+        Quat rot = Quat.Euler(new Vec3(0, 90, 0)) * (Quat)TRS.rotation;
 
         Vec3 offset = pos - centerAxis;
         offset = rot * offset;
@@ -47,7 +43,7 @@ public class CubeFragment : MonoBehaviour
 
         TRS.SetTRS(pos, rot, Vec3.One);
 
-        //SetTRStoTransform();
+        SetTRStoTransform();
     }
 
     private void SetTRStoTransform()

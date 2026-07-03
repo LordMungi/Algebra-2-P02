@@ -18,17 +18,31 @@ public class CubeRubik : MonoBehaviour
 
     void Update()
     {
-        if (Input.GetKeyDown(KeyCode.Space))
+        if (Input.GetKeyDown(KeyCode.Q))
         {
             foreach (CubeFragment f in fragments)
             {
                 f.SetTargetRotation(transform.position, new Vector3(0, 90, 0));
             }
         }
+        if (Input.GetKeyDown(KeyCode.W))
+        {
+            foreach (CubeFragment f in fragments)
+            {
+                f.SetTargetRotation(transform.position, new Vector3(90, 0, 0));
+            }
+        }
+        if (Input.GetKeyDown(KeyCode.E))
+        {
+            foreach (CubeFragment f in fragments)
+            {
+                f.SetTargetRotation(transform.position, new Vector3(0, 0, 90));
+            }
+        }
 
         foreach (CubeFragment f in fragments)
         {
-            f.MoveTowardsTarget(transform.position, Speed * Time.deltaTime);
+            //f.MoveTowardsTarget(transform.position, Speed * Time.deltaTime);
         }
     }
 }
