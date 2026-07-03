@@ -112,6 +112,11 @@ namespace CustomMath
         {
             return new Quat(clone);
         }
+
+        public static implicit operator Quaternion(Quat clone)
+        {
+            return new Quaternion(clone.x, clone.y, clone.z, clone.w);
+        }
         #endregion
 
         #region Static
@@ -293,12 +298,20 @@ namespace CustomMath
 
         public static Quat SlerpUnclamped(Quat a, Quat b, float t)
         {
+            a = a.normalized;
+            b = b.normalized;
+
             if (Dot(a, b) < 0f)
             {
                 b.x = -b.x;
                 b.y = -b.y;
                 b.z = -b.z;
                 b.w = -b.w;
+            }
+
+            if (Dot(a, b) > 0.9995f)
+            {
+                return LerpUnclamped(a, b, t);
             }
 
             float angle = Mathf.Acos(Dot(a, b));
